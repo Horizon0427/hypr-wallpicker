@@ -302,23 +302,21 @@ int main(int argc, char **argv) {
         pid_t pid = fork();
 
         if (pid == 0) {
-          char script[] =
-              "awww img \"$1\" --transition-type grow --transition-pos "
-              "\"$2\",\"$3\" "
-              "--transition-step 30 --transition-duration 1.2 "
-              "--transition-fps 60 & "
-              "ln -sf \"$1\" $HOME/.config/hypr/current_wallpaper.png ; "
-              "matugen image \"$1\" --source-color-index 0 ; "
-              "makoctl reload ; "
-              "hyprctl reload ; "
-              "sleep 0.5 ; "
-              "$HOME/.config/waybar/scripts/reload-waybar.sh";
-          execl("/bin/sh", "sh", "-c", script, "--", full_target_path, relX_str,
-                relY_str, NULL);
+          const char *user_home = getenv("HOME");
+          if (user_home == NULL) {
+            fprintf(stderr, "Error: HOME environment variable not set.\n");
+            exit(1);
+          }
+          
+          char helper_script_path[PATH_MAX];
+          snprintf(helper_script_path, sizeof(helper_script_path), 
+                   "%s/.config/hypr-wallpicker/set_wallpaper.sh", user_home);
 
-          perror("execl failed");
+          execl(helper_script_path, "set_wallpaper.sh", 
+                full_target_path, relX_str, relY_str, NULL);
+
+          perror("execl failed: config-helper script not found or not executable");
           exit(1);
-
         } else if (pid < 0) {
 
           perror("fork failed");
