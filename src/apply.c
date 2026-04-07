@@ -39,17 +39,7 @@ static bool RunBuiltinFallback(const char *wall_path, const char *relX_str,
       "  awww img \"$1\" --transition-type grow --transition-pos \"$2,$3\" "
       "    --transition-step 30 --transition-duration 1.2 "
       "    --transition-fps 60; "
-      "fi; "
-      "mkdir -p \"$HOME/.config/hypr\"; "
-      "ln -sfn \"$1\" \"$HOME/.config/hypr/current_wallpaper.png\"; "
-      "if command -v matugen >/dev/null 2>&1; then "
-      "  matugen image \"$1\" --source-color-index 0; "
-      "fi; "
-      "command -v makoctl >/dev/null 2>&1 && makoctl reload; "
-      "command -v hyprctl >/dev/null 2>&1 && hyprctl reload; "
-      "if [ -x \"$HOME/.config/waybar/scripts/reload-waybar.sh\" ]; then "
-      "  \"$HOME/.config/waybar/scripts/reload-waybar.sh\"; "
-      "fi";
+      "fi; ";
 
   execl("/bin/sh", "sh", "-c", script, "--", wall_path, relX_str, relY_str,
         NULL);

@@ -1,6 +1,6 @@
 # Hypr-wallpicker ⬡
 
-Hypr-wallpicker a standalone hexagonal wallpaper selector written in `C` and `Raylib` for Hyprland.
+Hypr-wallpicker a standalone hexagonal wallpaper selector written in `C` and `Raylib`.
 
 ![showcase](./demonstration/showcase.gif)
 
@@ -9,8 +9,8 @@ Hypr-wallpicker a standalone hexagonal wallpaper selector written in `C` and `Ra
 * **Hexagonal grid UI:** It calculates and renders a proper hexagonal grid for wallpaper thumbnails.
 * **Animations:** It provides scale and brightness transitions on mouse hover.
 * **Auto-caching**: It automatically resizes, crops, and applies a hex-mask to high-res wallpapers for fast subsequent loads.
-* **Wayland transition:** Integrates with `awww` to trigger ripple transitions directly from the absolute screen coordinates of the clicked hex tile.
-* **Color extraction support:** It supprots `matugen` upon selection to dynamically adjust your system theme color based on the chosen wallpaper.
+* **Transition:** Integrates with `awww` to trigger ripple transitions directly from the absolute screen coordinates of the clicked hex tile.
+* **Color extraction support:** It supports `matugen` upon selection to dynamically adjust your system theme color based on the chosen wallpaper.
 
 By utilizing raw `C` and `Raylib`, it bypasses the overhead and bloated dependencies typical of modern JS/Electron UI frameworks.
 
@@ -45,29 +45,24 @@ The built-in fallback is currently **Hyprland/Wayland-oriented**.
 
 ### Built-in Fallback Runtime Integrations (No User Hook)
 
-If no user hook is installed, the built-in fallback may use:
+If no user hook is installed, the built-in fallback may use `awww` *(optional)* for animated wallpaper transitions **if available**. 
 
-- `awww` *(optional)* — used for animated wallpaper transitions **if available**
-- `matugen` *(optional)* — generate colors from the selected wallpaper
-- `hyprctl` *(optional)* — reload Hyprland
-- `makoctl` *(optional)* — reload Mako notifications
-- `~/.config/waybar/scripts/reload-waybar.sh` *(optional user script)* — reload Waybar
 
-> The built-in fallback will still run without `awww`, but no animated wallpaper transition will occur unless `awww` is installed.
+>The built-in fallback is intentionally kept bare-minimum. To use color extraction or reload desktop components, please configure a custom hook.
 
 ---
 
 ### Wayland / Hyprland Example Hook
 
-If you use the provided Wayland example hook, these are the expected runtime tools:
+If you use the provided Wayland example hook (designed as a tutorial template), you can easily uncomment sections to enable:
 
 - `awww` **(required)** — apply wallpaper + transition
 - `matugen` *(optional)* — generate colors from the selected wallpaper
 - `hyprctl` *(optional)* — reload Hyprland
 - `makoctl` *(optional)* — reload Mako notifications
-- `~/.config/waybar/scripts/reload-waybar.sh` *(optional user script)* — reload Waybar
+- `swaync-client` *(optional)* — reload SwayNC
 
-> The provided Wayland example hook explicitly requires `awww`.
+> The provided Wayland example hook requires `awww`, but it can be replaced by other utils such as `hyprpaper` in your own shell script. 
 
 ---
 
@@ -100,7 +95,7 @@ make
 
 ### Install
 
-Install the binary to `usr/local/bin`:
+Install the binary to `/usr/local/bin`:
 
 ```bash
 sudo make install
@@ -121,7 +116,7 @@ sudo make reinstall
 
 ### Run
 
-Run with the default wallpaper directory at `~Pictures/wallpapers`:
+Run with the default wallpaper directory at `~/Pictures/wallpapers`:
 
 ```bash
 wallpicker
@@ -145,7 +140,7 @@ Example hook scripts are provided in:
 
 To use one, copy it to the runtime hook path expected by `hypr-wallpicker`:
 
-`~/config/hypr-wallpicker/apply-wallpaper.sh`
+`~/.config/hypr-wallpicker/apply-wallpaper.sh`
 
 Wayland / Hyprland example:
 
@@ -160,6 +155,21 @@ X11 / i3 example:
 mkdir -p ~/.config/hypr-wallpicker
 cp scripts/apply-wallpaper-x11.example.sh ~/.config/hypr-wallpicker/apply-wallpaper.sh
 chmod +x ~/.config/hypr-wallpicker/apply-wallpaper.sh
+```
+
+---
+
+### Display the interface in full-screen mode
+
+In Hyprland, please add this in `~/.config/hypr/hyprland.conf`:
+```
+windowrule {
+    name = wall-paper-picker
+    match:class = ^(wallpicker)$
+    fullscreen = true
+    center = true
+    stay_focused = true
+}
 ```
 
 

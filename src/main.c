@@ -54,8 +54,7 @@ int main(int argc, char **argv) {
   } else {
     const char *home = getenv("HOME");
     if (home == NULL) {
-      fprintf(stderr,
-              "Error: Unable to retrieve HOME environment variable!\n");
+      fprintf(stderr, "Error: Unable to retrieve HOME environment variable!\n");
       return 1;
     }
     snprintf(wp_dir, sizeof(wp_dir), "%s/Pictures/wallpapers", home);
@@ -64,8 +63,7 @@ int main(int argc, char **argv) {
   char cache_dir[PATH_MAX];
   const char *home = getenv("HOME");
   if (home == NULL) {
-    fprintf(stderr,
-            "Error: Unable to retrieve HOME environment variable!\n");
+    fprintf(stderr, "Error: Unable to retrieve HOME environment variable!\n");
     return 1;
   }
 
