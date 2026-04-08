@@ -3,10 +3,6 @@ set -euo pipefail
 
 # ==============================================================================
 # Hypr-Wallpicker Hook Template (Wayland)
-#
-# This script is executed automatically by wallpicker when a wallpaper is clicked.
-# To activate it, rename this file to 'apply-wallpaper.sh' and place it in:
-# ~/.config/hypr-wallpicker/
 # ==============================================================================
 
 # Arguments passed by the C program
