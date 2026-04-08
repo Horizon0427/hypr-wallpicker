@@ -22,12 +22,7 @@ typedef struct {
 } Wallpaper;
 */
 
-bool HasExtension(const char *filename, const char *ext) {
-  const char *dot = strrchr(filename, '.');
-  if (!dot || dot == filename)
-    return false;
-  return strcmp(dot, ext) == 0;
-}
+
 
 Image GenerateHexMask(int size, float radius) {
   Image mask = GenImageColor(size, size, BLANK);
