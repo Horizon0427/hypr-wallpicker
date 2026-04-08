@@ -5,5 +5,9 @@
 #include <stddef.h>
 
 bool GetCacheDir(char *out_path, size_t max_len);
+char *GetDefaultWallpaperDir(void);
+char *JoinPath(const char *dir, const char *name);
+char *BuildCacheImagePath(const char *cache_dir, const char *filename);
+bool IsSupportedWallpaperFile(const char *filename);
 
 #endif
