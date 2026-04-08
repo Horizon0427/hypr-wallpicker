@@ -58,8 +58,6 @@ fi
 # ------------------------------------------------------------------------------
 # 4. Reload UI Components (Post-commands)
 # ------------------------------------------------------------------------------
-# After colors are generated, reload your desktop components to apply the new theme.
-# For example, you can uncomment the ones you actually use in your dotfiles:
 
 # command -v makoctl >/dev/null 2>&1 && makoctl reload
 # command -v swaync-client >/dev/null 2>&1 && swaync-client -rs
