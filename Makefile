@@ -7,7 +7,7 @@ DEBUG_CFLAGS = -g -O0 -Wall -Wextra -Werror
 LDFLAGS =
 LDLIBS = -lraylib -lm -ldl -lpthread -lrt
 
-SRC = src/main.c src/apply.c
+SRC = src/main.c src/apply.c src/fs.c
 TARGET = wallpicker
 
 PREFIX ?= /usr/local

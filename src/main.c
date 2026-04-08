@@ -1,4 +1,6 @@
+#include "app.h"
 #include "apply.h"
+#include "fs.h"
 #include "raylib.h"
 
 #include <dirent.h>
@@ -9,6 +11,7 @@
 #include <string.h>
 #include <unistd.h>
 
+/*
 #define HEX_RADIUS 200.0f
 
 typedef struct {
@@ -17,6 +20,7 @@ typedef struct {
   float currentScale;
   float currentColor;
 } Wallpaper;
+*/
 
 bool HasExtension(const char *filename, const char *ext) {
   const char *dot = strrchr(filename, '.');
@@ -54,26 +58,31 @@ int main(int argc, char **argv) {
   } else {
     const char *home = getenv("HOME");
     if (home == NULL) {
-      fprintf(stderr,
-              "Error: Unable to retrieve HOME environment variable!\n");
+      fprintf(stderr, "Error: Unable to retrieve HOME environment variable!\n");
       return 1;
     }
     snprintf(wp_dir, sizeof(wp_dir), "%s/Pictures/wallpapers", home);
   }
 
+  /*
+    char cache_dir[PATH_MAX];
+    const char *home = getenv("HOME");
+    if (home == NULL) {
+      fprintf(stderr, "Error: Unable to retrieve HOME environment variable!\n");
+      return 1;
+    }
+
+    snprintf(cache_dir, sizeof(cache_dir), "%s/.cache/wallpicker", home);
+
+    char mkdir_cmd[PATH_MAX + 128];
+    snprintf(mkdir_cmd, sizeof(mkdir_cmd), "mkdir -p \"%s\"", cache_dir);
+    system(mkdir_cmd);
+  */
+
   char cache_dir[PATH_MAX];
-  const char *home = getenv("HOME");
-  if (home == NULL) {
-    fprintf(stderr,
-            "Error: Unable to retrieve HOME environment variable!\n");
-    return 1;
+  if (!GetCacheDir(cache_dir, sizeof(cache_dir))) {
+    return 1; // exit if the func fails to read or make
   }
-
-  snprintf(cache_dir, sizeof(cache_dir), "%s/.cache/wallpicker", home);
-
-  char mkdir_cmd[PATH_MAX + 128];
-  snprintf(mkdir_cmd, sizeof(mkdir_cmd), "mkdir -p \"%s\"", cache_dir);
-  system(mkdir_cmd);
 
   int capacity = 0;
   DIR *dir = opendir(wp_dir);

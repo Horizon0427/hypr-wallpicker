@@ -14,17 +14,17 @@
 #define DEFAULT_SPACING 15.0f
 
 typedef struct {
-    Texture2D tex;
-    char filename[PATH_MAX];
-    float currentScale;
-    float currentColor;
+  Texture2D tex;
+  char filename[PATH_MAX];
+  float currentScale;
+  float currentColor;
 } Wallpaper;
 
 typedef struct {
-    bool valid;
-    char full_target_path[PATH_MAX * 2];
-    float rel_x;
-    float rel_y;
+  bool valid;
+  char full_target_path[PATH_MAX * 2];
+  float rel_x;
+  float rel_y;
 } SelectionResult;
 
 #endif
