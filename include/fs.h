@@ -1,7 +1,4 @@
-// include fs.h
-
 #ifndef FS_H
-
 #define FS_H
 
 #include <stdbool.h>
