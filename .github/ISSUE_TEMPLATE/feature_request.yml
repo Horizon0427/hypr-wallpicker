@@ -1,0 +1,93 @@
+name: Feature Request
+description: Suggest an improvement or new capability for hypr-wallpicker
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the suggestion.
+
+        Please describe the feature clearly and explain the problem it solves or the workflow it improves.
+
+  - type: input
+    id: summary
+    attributes:
+      label: Short summary
+      description: One-sentence summary of the feature
+      placeholder: Add backend-aware default apply behavior for Wayland and X11
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / use case
+      description: What problem does this solve? What workflow is missing or awkward today?
+      placeholder: Right now the built-in fallback is Wayland-oriented. X11 users need to provide a custom hook for basic out-of-the-box behavior.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: Proposed solution
+      description: Describe the feature you want
+      placeholder: Detect the session backend and use a default Wayland preset (Hyprland/awww) or X11 preset (i3/feh) when no custom hook is present.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any workarounds or alternative approaches you have considered
+      placeholder: Using only custom hook scripts works, but it makes first-run UX worse for new users.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      description: Which part of the project does this relate to most?
+      options:
+        - UI / layout
+        - Rendering / animation
+        - Wallpaper loading / cache
+        - Apply hook / desktop integration
+        - X11 / Wayland backend behavior
+        - Config / presets
+        - Build / packaging
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: compatibility
+    attributes:
+      label: Compatibility / platform notes
+      description: Mention any specific compositor, WM, DE, distro, or backend constraints
+      placeholder: This should work on Hyprland and Sway on Wayland, and i3 on X11.
+    validations:
+      required: false
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope / constraints
+      description: Any constraints, tradeoffs, or design preferences
+      placeholder: Prefer minimal dependencies and keep custom hook support as the primary override mechanism.
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional context
+      description: Links, mockups, references, examples, or anything else helpful
+      placeholder: Similar behavior exists in other wallpaper tools that auto-detect session backend.
+    validations:
+      required: true

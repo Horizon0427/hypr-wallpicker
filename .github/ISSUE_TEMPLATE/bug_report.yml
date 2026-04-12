@@ -1,0 +1,139 @@
+name: Bug Report
+description: Report a reproducible problem with hypr-wallpicker
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug.
+
+        Please provide as much detail as possible so the issue can be reproduced and fixed quickly.
+
+  - type: input
+    id: summary
+    attributes:
+      label: Short summary
+      description: One-sentence description of the issue
+      placeholder: Clicking a wallpaper closes the app without applying it
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen?
+      placeholder: The wallpaper should be applied and the app should exit cleanly.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual_behavior
+    attributes:
+      label: Actual behavior
+      description: What actually happened?
+      placeholder: The app closes, but the wallpaper is not applied.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps_to_reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Provide exact steps so the issue can be reproduced
+      placeholder: |
+        1. Run `./wallpicker ~/Pictures/wallpapers`
+        2. Hover a wallpaper
+        3. Click left mouse button
+        4. Observe behavior
+    validations:
+      required: true
+
+  - type: dropdown
+    id: session_backend
+    attributes:
+      label: Session backend
+      description: Which display/session backend are you using?
+      options:
+        - Wayland
+        - X11
+        - Unknown / Not sure
+    validations:
+      required: true
+
+  - type: input
+    id: wm_de
+    attributes:
+      label: Window manager / compositor / desktop
+      description: e.g. Hyprland, i3, Sway, KDE, GNOME
+      placeholder: Hyprland
+    validations:
+      required: true
+
+  - type: input
+    id: distro
+    attributes:
+      label: Distribution
+      description: Linux distribution and version
+      placeholder: Arch Linux / Fedora 42 / Debian 13
+    validations:
+      required: true
+
+  - type: input
+    id: app_version
+    attributes:
+      label: hypr-wallpicker version / commit
+      description: Tag, release, or commit hash if known
+      placeholder: v0.2.0 or commit abc1234
+    validations:
+      required: false
+
+  - type: input
+    id: raylib_version
+    attributes:
+      label: raylib version
+      description: If known
+      placeholder: 5.0
+    validations:
+      required: false
+
+  - type: textarea
+    id: hook_script
+    attributes:
+      label: Custom apply hook in use?
+      description: If you use `~/.config/hypr-wallpicker/apply-wallpaper.sh`, describe what it does (do not paste secrets)
+      placeholder: Uses awww, updates a symlink, runs matugen, reloads waybar.
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / terminal output
+      description: Paste any stdout/stderr, warnings, or error messages
+      render: shell
+      placeholder: |
+        ./wallpicker
+        Warning: failed to write cache image: ...
+    validations:
+      required: false
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots / screen recordings
+      description: Optional visual context if helpful
+      placeholder: Drag and drop screenshots here.
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional context
+      description: Anything else that may help diagnose the issue
+      placeholder: This only happens on first launch after clearing the cache.
+    validations:
+      required: true
