@@ -6,8 +6,7 @@ Show & Tell
 
 ### Discussion Content
 
-```md id="1q2eg4"
-# Share your hypr-wallpicker setup / apply-wallpaper.sh workflow
+## Share your hypr-wallpicker setup / apply-wallpaper.sh workflow
 
 This thread is for showing how you use **hypr-wallpicker** in your actual setup.
 
