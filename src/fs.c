@@ -11,25 +11,25 @@
 
 static bool EnsureDirExists(const char *dir_path) {
   struct stat st = {0};
-  
+
   if (stat(dir_path, &st) == 0) {
     if (!S_ISDIR(st.st_mode)) {
-      fprintf(stderr, "Error: '%s' exists but is not a directory\n", dir_path);     
-      
+      fprintf(stderr, "Error: '%s' exists but is not a directory\n", dir_path);
+
       return false;
     }
+    return true;
+  }
+
+  if (mkdir(dir_path, 0755) != 0) {
+    fprintf(stderr, "Error trying to create directory '%s': %s\n", dir_path,
+            strerror(errno));
+
+    return false;
+  }
+
   return true;
- }
-
-  if (mkdir(dir_path, 0755) !=0) {
-  fprintf(stderr, "Error trying to create directory '%s': %s\n", dir_path, strerror(errno));
-
-  return false;
 }
-
-return true;
-}
-
 
 bool GetCacheDir(char *out_path, size_t max_len) {
   const char *home = getenv("HOME");

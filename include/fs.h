@@ -10,5 +10,5 @@ char *JoinPath(const char *dir, const char *name);
 char *BuildCacheImagePath(const char *cache_dir, const char *filename);
 bool IsSupportedWallpaperFile(const char *filename);
 bool HasExtension(const char *filename, const char *ext);
-  
+
 #endif

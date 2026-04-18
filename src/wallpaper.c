@@ -96,6 +96,9 @@ void UnloadWallpapers(App *app) {
       if (app->wallpapers[i].tex.id != 0) {
         UnloadTexture(app->wallpapers[i].tex);
       }
+      if (app->wallpapers[i].filename != NULL) {
+        free(app->wallpapers[i].filename);
+      }
     }
 
     free(app->wallpapers);
@@ -196,9 +199,16 @@ static bool LoadSingleWallpaper(App *app, const char *filename) {
 
   if (img.data != NULL && img.width > 1) {
     Wallpaper *wp = &app->wallpapers[app->wp_count];
+    /*
     int n = snprintf(wp->filename, sizeof(wp->filename), "%s", filename);
 
     if (n < 0 || (size_t)n >= sizeof(wp->filename)) {
+      fprintf(stderr, "Warning: filename too long, skipping: %s\n", filename);
+      goto cleanup;
+    }
+    */
+    wp->filename = strdup(filename);
+    if (wp->filename == NULL) {
       fprintf(stderr, "Warning: filename too long, skipping: %s\n", filename);
       goto cleanup;
     }
@@ -206,6 +216,8 @@ static bool LoadSingleWallpaper(App *app, const char *filename) {
     wp->tex = LoadTextureFromImage(img);
     if (wp->tex.id == 0) {
       fprintf(stderr, "Warning: failed to create texture for %s\n", filename);
+      free(wp->filename);
+      wp->filename = NULL;
       goto cleanup;
     }
 

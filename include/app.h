@@ -17,14 +17,16 @@
 
 typedef struct {
   Texture2D tex;
-  char filename[PATH_MAX];
+  char *filename;
   float currentScale;
   float currentColor;
+  float render_x;
+  float render_y;
 } Wallpaper;
 
 typedef struct {
   bool valid;
-  char full_target_path[PATH_MAX * 2];
+  char *full_target_path;
   float rel_x;
   float rel_y;
 } SelectionResult;
@@ -65,4 +67,5 @@ int AppRun(const AppConfig *config);
 SessionBackend DetectSessionBackend(void);
 const char *SessionBackendName(SessionBackend backend);
 
+void FreeSelectionResult(SelectionResult *result);
 #endif

@@ -21,11 +21,11 @@ static bool RunUserHook(const char *wall_path, const char *relX_str,
 
   char hook_path[PATH_MAX];
   int n = snprintf(hook_path, sizeof(hook_path),
-           "%s/.config/hypr-wallpicker/apply-wallpaper.sh", home);
+                   "%s/.config/hypr-wallpicker/apply-wallpaper.sh", home);
 
   if (n < 0 || (size_t)n >= sizeof(hook_path)) {
     return false;
-}
+  }
 
   execl("/bin/sh", "sh", hook_path, wall_path, relX_str, relY_str, NULL);
 
@@ -43,7 +43,7 @@ static bool RunBuiltinFallback(const char *wall_path, const char *relX_str,
       "    --transition-fps 60; "
       "fi; "
 
-  //        ***LEGACY FALLBACK LEFT IN FOR NOW***
+      //        ***LEGACY FALLBACK LEFT IN FOR NOW***
 
       /*    "mkdir -p \"$HOME/.config/hypr\"; "
             "ln -sfn \"$1\" \"$HOME/.config/hypr/current_wallpaper.png\"; "
