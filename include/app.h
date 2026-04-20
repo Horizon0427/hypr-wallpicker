@@ -20,6 +20,7 @@ typedef struct {
   char *filename;
   float currentScale;
   float currentColor;
+  // Cached render coordinates to avoid redundant layout calculations in the render loop
   float render_x;
   float render_y;
 } Wallpaper;
