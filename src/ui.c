@@ -67,7 +67,7 @@ SelectionResult RunUI(App *app, const AppConfig *config) {
       float dx = mousePoint.x - currentX;
       float dy = mousePoint.y - currentY;
 
-      if ((dx * dx + dy * dy) <= (inradius * inradius)) {
+      if (hoveredIndex == -1 && (dx * dx + dy * dy) <= (inradius * inradius)) {
         hoveredIndex = i;
       }
 
