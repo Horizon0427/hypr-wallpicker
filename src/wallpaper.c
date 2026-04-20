@@ -202,13 +202,13 @@ static bool LoadSingleWallpaper(App *app, const char *filename) {
 
     wp->filename = strdup(filename);
     if (wp->filename == NULL) {
-      fprintf(stderr, "Warning: filename too long, skipping: %s\n", filename);
+      fprintf(stderr, "Warning: out of memory allocating filename for %s\n", filename);
       goto cleanup;
     }
 
     wp->tex = LoadTextureFromImage(img);
     if (wp->tex.id == 0) {
-      fprintf(stderr, "Warning: out of memory allocating filename for %s\n", filename);
+      fprintf(stderr, "Warning: failed to create texture for %s\n", filename);
       free(wp->filename);
       wp->filename = NULL;
       goto cleanup;
