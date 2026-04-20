@@ -51,9 +51,14 @@ const char *SessionBackendName(SessionBackend backend) {
 }
 
 void FreeSelectionResult(SelectionResult *result) {
-  if (result != NULL && result->full_target_path != NULL) {
-    free(result->full_target_path);
-    result->full_target_path = NULL;
+  if (result != NULL) {
+    if (result->full_target_path != NULL) {
+      free(result->full_target_path);
+      result->full_target_path = NULL;
+    }
+    result->valid = false;
+    result->rel_x = 0.0f;
+    result->rel_y = 0.0f;
   }
 }
 
