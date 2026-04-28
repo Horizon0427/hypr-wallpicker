@@ -7,6 +7,8 @@
 #include "ui.h"
 #include "wallpaper.h"
 
+#include <errno.h>
+#include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -69,10 +71,69 @@ AppConfig AppConfigFromArgs(int argc, char **argv) {
   config.window_height = DEFAULT_WINDOW_HEIGHT;
   config.cols = DEFAULT_COLS;
   config.spacing = DEFAULT_SPACING;
+  config.angle = 0.0f; // vertical by default
   config.backend = DetectSessionBackend();
 
-  if (argc > 1) {
-    config.wallpaper_dir = argv[1];
+  static struct option long_options[] = {{"cols", required_argument, 0, 'c'},
+                                         {"spacing", required_argument, 0, 's'},
+                                         {"angle", required_argument, 0, 'a'},
+                                         {0, 0, 0, 0}};
+
+  int opt;
+  int option_index = 0;
+  char *endptr;
+
+  opterr = 0;
+
+  while ((opt = getopt_long(argc, argv, "c:s:a:", long_options,
+                            &option_index)) != -1) {
+    switch (opt) {
+    case 'c': {
+      errno = 0;
+      long val = strtol(optarg, &endptr, 10);
+      if (errno == 0 && *endptr == '\0' && val >= 1) {
+        config.cols = (int)val;
+      } else {
+        fprintf(stderr,
+                "Warning: Invalid columns '%s', falling back to default %d\n",
+                optarg, DEFAULT_COLS);
+      }
+      break;
+    }
+    case 's': {
+      errno = 0;
+      float val = strtof(optarg, &endptr);
+      if (errno == 0 && *endptr == '\0' && val >= 0.0f) {
+        config.spacing = val;
+      } else {
+        fprintf(stderr,
+                "Warning: Invalid spacing '%s', falling back to default %.1f\n",
+                optarg, DEFAULT_SPACING);
+      }
+      break;
+    }
+    case 'a': {
+      errno = 0;
+      float val = strtof(optarg, &endptr);
+      if (errno == 0 && *endptr == '\0') {
+        config.angle = val;
+      } else {
+        fprintf(stderr,
+                "Warning: Invalid angle '%s', falling back to default 0.0\n",
+                optarg);
+      }
+      break;
+    }
+    case '?':
+      fprintf(stderr, "Warning: Ignored unknown or incomplete option.\n");
+      break;
+    default:
+      break;
+    }
+  }
+
+  if (optind < argc) {
+    config.wallpaper_dir = argv[optind];
   } else {
     config.wallpaper_dir = NULL;
   }
@@ -107,6 +168,7 @@ int AppRun(const AppConfig *config) {
   SetConfigFlags(FLAG_WINDOW_TRANSPARENT | FLAG_WINDOW_UNDECORATED);
   InitWindow(config->window_width, config->window_height, "wallpicker");
 
+  app.angle = config->angle;
   if (!InitWallpaperResources(&app)) {
     fprintf(stderr, "Error: failed to initialize wallpaper resources\n");
     AppShutdown(&app);

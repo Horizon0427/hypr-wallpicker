@@ -20,7 +20,8 @@ typedef struct {
   char *filename;
   float currentScale;
   float currentColor;
-  // Cached render coordinates to avoid redundant layout calculations in the render loop
+  // Cached render coordinates to avoid redundant layout calculations in the
+  // render loop
   float render_x;
   float render_y;
 } Wallpaper;
@@ -44,6 +45,7 @@ typedef struct {
   int window_height;
   int cols;
   float spacing;
+  float angle;
   SessionBackend backend;
 } AppConfig;
 
@@ -58,8 +60,9 @@ typedef struct {
   Image hex_mask;
   int img_size;
 
-  float scroll_y;
-  float target_scroll_y;
+  float scroll_offset;
+  float target_scroll_offset;
+  float angle;
 } App;
 
 AppConfig AppConfigFromArgs(int argc, char **argv);

@@ -11,7 +11,7 @@
 #include <string.h>
 #include <unistd.h>
 
-static Image GenerateHexMask(int size, float radius);
+static Image GenerateHexMask(int size, float radius, float angle_deg);
 static int CountWallpapers(const char *dir_path);
 static bool LoadSingleWallpaper(App *app, const char *filename);
 
@@ -21,7 +21,7 @@ bool InitWallpaperResources(App *app) {
   }
 
   app->img_size = (int)(HEX_RADIUS * 2.0f);
-  app->hex_mask = GenerateHexMask(app->img_size, HEX_RADIUS);
+  app->hex_mask = GenerateHexMask(app->img_size, HEX_RADIUS, app->angle);
 
   return true;
 }
@@ -69,6 +69,10 @@ bool LoadWallpapers(App *app) {
   while ((ent = readdir(dir)) != NULL) {
     if (!IsSupportedWallpaperFile(ent->d_name)) {
       continue;
+    }
+
+    if (WindowShouldClose()) {
+      break;
     }
 
     BeginDrawing();
@@ -202,7 +206,8 @@ static bool LoadSingleWallpaper(App *app, const char *filename) {
 
     wp->filename = strdup(filename);
     if (wp->filename == NULL) {
-      fprintf(stderr, "Warning: out of memory allocating filename for %s\n", filename);
+      fprintf(stderr, "Warning: out of memory allocating filename for %s\n",
+              filename);
       goto cleanup;
     }
 
@@ -230,15 +235,25 @@ cleanup:
   return ok;
 }
 
-static Image GenerateHexMask(int size, float radius) {
+static Image GenerateHexMask(int size, float radius, float angle_deg) {
   Image mask = GenImageColor(size, size, BLANK);
   float cx = (float)size / 2.0f;
   float cy = (float)size / 2.0f;
 
+  float rad = -angle_deg * DEG2RAD;
+  float cosA = cosf(rad);
+  float sinA = sinf(rad);
+
   for (int y = 0; y < size; y++) {
     for (int x = 0; x < size; x++) {
-      float dx = fabsf((float)x - cx);
-      float dy = fabsf((float)y - cy);
+      float tx = (float)x - cx;
+      float ty = (float)y - cy;
+
+      float rot_x = tx * cosA - ty * sinA;
+      float rot_y = tx * sinA + ty * cosA;
+
+      float dx = fabsf(rot_x);
+      float dy = fabsf(rot_y);
 
       if (dx <= 0.866025f * radius && dy <= radius - dx * 0.57735f) {
         ImageDrawPixel(&mask, x, y, WHITE);

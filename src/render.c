@@ -2,7 +2,7 @@
 #include "raylib.h"
 #include <stddef.h>
 
-void RenderWallpapers(const App *app, int hoveredIndex) {
+void RenderWallpapers(const App *app, int hoveredIndex, float angle_deg) {
 
   if (app == NULL || app->wallpapers == NULL || app->wp_count <= 0)
     return;
@@ -49,7 +49,9 @@ void RenderWallpapers(const App *app, int hoveredIndex) {
 
     DrawTexturePro(app->wallpapers[hoveredIndex].tex, sourceRec, destRec,
                    origin, 0.0f, tint);
-    DrawPolyLinesEx(currentCenter, 6, HEX_RADIUS * scale, 30.0f, 8.0f, WHITE);
+
+    DrawPolyLinesEx(currentCenter, 6, HEX_RADIUS * scale, 30.0f + angle_deg,
+                    8.0f, WHITE);
   }
 
   EndDrawing();

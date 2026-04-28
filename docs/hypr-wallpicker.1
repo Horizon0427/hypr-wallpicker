@@ -1,0 +1,118 @@
+.TH WALLPICKER 1
+.SH NAME
+wallpicker \- interactive wallpaper selector with hexagonal thumbnail UI
+.SH SYNOPSIS
+.B wallpicker
+.br
+.B wallpicker
+.I directory
+.br
+.B wallpicker
+[\fB\-c\fR \fIn\fR]
+[\fB\-s\fR \fIpx\fR]
+[\fB\-a\fR \fIdeg\fR]
+[\fIdirectory\fR]
+.SH DESCRIPTION
+.B wallpicker
+is an interactive utility for producing wallpaper selections.
+It operates on a directory of images and produces a transparent, undecorated raylib window containing a hexagonal grid of thumbnails.
+
+The thumbnails are generated deterministically and cached as follows:
+On the first run, supported images are resized, clipped to a hexagonal mask, and written to the cache directory.
+Subsequent executions load directly from the cache.
+
+Clicking a thumbnail computes the relative X and Y screen coordinates of the selection and tries to execute the runtime hook.
+If no hook exists, it falls back to a minimal built-in apply logic.
+.SH OPTIONS
+The following parameters control the output format.
+.B wallpicker
+does not currently implement \fB\-h\fR or \fB\-\-help\fR flags.
+.TP
+.BR \-c ", " \-\-cols " " \fIn\fR
+Arrange thumbnails in \fIn\fR columns.
+\fIn\fR must be a positive integer.
+.TP
+.BR \-s ", " \-\-spacing " " \fIpx\fR
+Set the gap between adjacent hexagons to \fIpx\fR pixels.
+\fIpx\fR must be a non-negative number.
+.TP
+.BR \-a ", " \-\-angle " " \fIdeg\fR
+Rotate the grid layout by \fIdeg\fR degrees clockwise.
+.TP
+.I directory
+A single optional positional argument specifying the directory to scan for wallpaper images.
+.SH FILES
+.TP
+.I $HOME/Pictures/wallpapers
+Default wallpaper directory.
+.TP
+.I $HOME/.cache/wallpicker
+Cache directory for hex-masked thumbnails.
+.TP
+.I $HOME/.config/hypr-wallpicker/apply-wallpaper.sh
+Runtime hook path.
+Executed on selection with three positional arguments:
+.B $1
+(wallpaper path),
+.B $2
+(rel_x),
+.B $3
+(rel_y).
+.PP
+The source repository ships with examples (e.g., \fIscripts/apply-wallpaper-wayland.example.sh\fR).
+These are examples only and are not auto-installed runtime hooks.
+.SH ENVIRONMENT
+.TP
+.B HOME
+Required by \fBwallpicker\fR to resolve the default wallpaper directory, cache directory, and runtime hook path.
+.SH EXIT STATUS
+.TP
+.B 0
+Normal success.
+.TP
+.B >0
+Non-zero on initialization, path resolution, memory allocation, or setup failures.
+.SH EXAMPLES
+Launch with the default wallpaper directory:
+.PP
+.RS
+.B wallpicker
+.RE
+.PP
+Launch with a specific directory:
+.PP
+.RS
+.B wallpicker
+.I ~/Pictures/wallpapers
+.RE
+.PP
+Launch with an absolute path and custom grid layout:
+.PP
+.RS
+.B wallpicker
+\fB\-c\fR 6 \fB\-a\fR 15.0
+.I /mnt/media/walls
+.RE
+.SH NOTES
+The built-in fallback logic is intentionally minimal right now.
+It only conditionally attempts to execute
+.BR awww (1)
+if the binary is present in the system path.
+All legacy post-commands (such as symlinking, matugen execution, and hyprland reloads) are currently commented out in the source code.
+
+Custom hooks are the intended portability path for handling differences between Wayland and X11 environments for now.
+
+Official documentation and updates can be found at the project repository:
+.UR https://github.com/Horizon0427/hypr-wallpicker
+.UE
+.SH AUTHORS
+.B Horizon0427
+(upstream maintainer)
+.br
+.B GrandBIRDLizard
+(core contributor)
+.SH SEE ALSO
+.BR sh (1),
+.BR feh (1),
+.BR groff (1),
+.BR man (7)

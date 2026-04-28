@@ -3,50 +3,47 @@
 #include "fs.h"
 #include "raylib.h"
 #include "render.h"
+#include <math.h>
 
 SelectionResult RunUI(App *app, const AppConfig *config) {
   SelectionResult result = {0};
   result.valid = false;
 
   float inradius = HEX_RADIUS * 0.866025f;
-  app->scroll_y = 0.0f;
-  app->target_scroll_y = 0.0f;
-
+  app->scroll_offset = 0.0f;
+  app->target_scroll_offset = 0.0f;
   while (!WindowShouldClose()) {
     Vector2 mousePoint = GetMousePosition();
 
-    int cols = config->cols;
+    float rad = config->angle * DEG2RAD;
+    float cosA = cosf(rad);
+    float sinA = sinf(rad);
+
+    int cols = config->cols < 1 ? 1 : config->cols;
     float spacing = config->spacing;
     float stepX = 1.73205f * HEX_RADIUS + spacing;
     float stepY = 1.5f * HEX_RADIUS + spacing;
 
     int totalRows = (app->wp_count + cols - 1) / cols;
-    float totalWidth = cols * stepX;
     float totalHeight = (2.0f * HEX_RADIUS) + (totalRows - 1) * stepY;
 
-    float startX = (GetScreenWidth() - totalWidth) / 2.0f + stepX / 2.0f;
-    float startY;
-    float maxScroll = 0.0f;
+    float center_x = ((cols - 1) * stepX + stepX / 2.0f) / 2.0f;
+    float center_y = (totalRows - 1) * stepY / 2.0f;
 
-    if (totalHeight <= GetScreenHeight()) {
-      startY = (GetScreenHeight() - totalHeight) / 2.0f + HEX_RADIUS;
-      app->target_scroll_y = 0.0f;
-    } else {
-      startY = HEX_RADIUS + 50.0f;
-      maxScroll = totalHeight - GetScreenHeight() + 100.0f;
-    }
+    float max_scroll_amplitude = totalHeight / 2.0f;
 
     float wheel = GetMouseWheelMove();
-    if (wheel != 0.0f && maxScroll > 0.0f) {
-      app->target_scroll_y += wheel * 120.0f;
+    if (wheel != 0.0f && max_scroll_amplitude > 0.0f) {
+      app->target_scroll_offset += wheel * 120.0f;
     }
 
-    if (app->target_scroll_y > 0.0f)
-      app->target_scroll_y = 0.0f;
-    if (app->target_scroll_y < -maxScroll)
-      app->target_scroll_y = -maxScroll;
+    if (app->target_scroll_offset > max_scroll_amplitude)
+      app->target_scroll_offset = max_scroll_amplitude;
+    if (app->target_scroll_offset < -max_scroll_amplitude)
+      app->target_scroll_offset = -max_scroll_amplitude;
 
-    app->scroll_y += (app->target_scroll_y - app->scroll_y) * 0.15f;
+    app->scroll_offset +=
+        (app->target_scroll_offset - app->scroll_offset) * 0.15f;
 
     int hoveredIndex = -1;
 
@@ -54,12 +51,19 @@ SelectionResult RunUI(App *app, const AppConfig *config) {
       int row = i / cols;
       int col = i % cols;
 
-      float currentX = startX + (float)col * stepX;
-      if ((row % 2) != 0) {
-        currentX += stepX / 2.0f;
-      }
+      float local_x = (float)col * stepX;
+      if ((row % 2) != 0)
+        local_x += stepX / 2.0f;
+      float local_y = (float)row * stepY;
 
-      float currentY = startY + (float)row * stepY + app->scroll_y;
+      local_x -= center_x;
+      local_y = local_y - center_y + app->scroll_offset;
+
+      float rot_x = local_x * cosA - local_y * sinA;
+      float rot_y = local_x * sinA + local_y * cosA;
+
+      float currentX = GetScreenWidth() / 2.0f + rot_x;
+      float currentY = GetScreenHeight() / 2.0f + rot_y;
 
       app->wallpapers[i].render_x = currentX;
       app->wallpapers[i].render_y = currentY;
@@ -67,8 +71,18 @@ SelectionResult RunUI(App *app, const AppConfig *config) {
       float dx = mousePoint.x - currentX;
       float dy = mousePoint.y - currentY;
 
-      if (hoveredIndex == -1 && (dx * dx + dy * dy) <= (inradius * inradius)) {
-        hoveredIndex = i;
+      float dx_abs = fabsf(dx);
+      float dy_abs = fabsf(dy);
+
+      float horiz_radius = inradius;
+      float vert_radius = HEX_RADIUS;
+
+      if (dx_abs <= horiz_radius && dy_abs <= vert_radius) {
+        if (1.73205f * dy_abs + dx_abs <= 1.73205f * HEX_RADIUS) {
+          if (hoveredIndex == -1) {
+            hoveredIndex = i;
+          }
+        }
       }
 
       float targetScale = (i == hoveredIndex) ? 1.15f : 1.0f;
@@ -80,7 +94,7 @@ SelectionResult RunUI(App *app, const AppConfig *config) {
           (targetColor - app->wallpapers[i].currentColor) * 0.15f;
     }
 
-    RenderWallpapers(app, hoveredIndex);
+    RenderWallpapers(app, hoveredIndex, config->angle);
 
     if (hoveredIndex != -1 && IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
       result.valid = true;

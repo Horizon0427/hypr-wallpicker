@@ -27,9 +27,10 @@ static bool RunUserHook(const char *wall_path, const char *relX_str,
     return false;
   }
 
-  execl("/bin/sh", "sh", hook_path, wall_path, relX_str, relY_str, NULL);
-
-  perror("execl user hook failed");
+  if (access(hook_path, X_OK) == 0) {
+    execl("/bin/sh", "sh", hook_path, wall_path, relX_str, relY_str, NULL);
+    perror("execl user hook failed");
+  }
   return false;
 }
 
