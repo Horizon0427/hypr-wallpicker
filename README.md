@@ -4,7 +4,7 @@
   <img src="./demonstration/logo.png" alt="Hypr-wallpicker Logo" width="250">
 </div>
 
-Hypr-wallpicker a standalone hexagonal wallpaper selector...
+Hypr-wallpicker a standalone hexagonal wallpaper selector... for Both Wayland and X11
 
 ![showcase](./demonstration/showcase.gif)
 
