@@ -1,6 +1,10 @@
-# Hypr-wallpicker ⬡
+# Hypr-wallpicker ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡                 
 
-Hypr-wallpicker a standalone hexagonal wallpaper selector written in `C` and `Raylib`.
+<div align="center">
+  <img src="./demonstration/Logo.png" alt="Hypr-wallpicker Logo" width="250">
+</div>
+
+Hypr-wallpicker a standalone hexagonal wallpaper selector...
 
 ![showcase](./demonstration/showcase.gif)
 
