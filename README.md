@@ -165,15 +165,16 @@ chmod +x ~/.config/hypr-wallpicker/apply-wallpaper.sh
 
 ### Display the interface in full-screen mode
 
-In Hyprland, please add this in `~/.config/hypr/hyprland.conf`:
+In Hyprland, please add this in `~/.config/hypr/hyprland.lua`:
 ```
-windowrule {
-    name = wall-paper-picker
-    match:class = ^(wallpicker)$
-    fullscreen = true
-    center = true
-    stay_focused = true
-}
+hl.window_rule({
+    name  = "wall-paper-picker",
+    match = { class = "^(wallpicker)$" },
+    fullscreen   = true,
+    center       = true,
+    stay_focused = true,
+    animation    = "popin 0",
+})
 ```
 
 
