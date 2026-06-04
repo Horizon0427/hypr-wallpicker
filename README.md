@@ -168,12 +168,11 @@ chmod +x ~/.config/hypr-wallpicker/apply-wallpaper.sh
 In Hyprland, please add this in `~/.config/hypr/hyprland.lua`:
 ```
 hl.window_rule({
-    name  = "wall-paper-picker",
-    match = { class = "^(wallpicker)$" },
+    name         = "wall-paper-picker",
+    match        = { class = "^(wallpicker)$" },
     fullscreen   = true,
     center       = true,
     stay_focused = true,
-    animation    = "popin 0",
 })
 ```
 
